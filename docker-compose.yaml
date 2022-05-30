@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  node:
+    build: .
+    ports:
+      - '${HTTP_SERVICE_PORT}:${HTTP_SERVICE_PORT}'
+    environment:
+      - HTTP_SERVICE_PORT=${HTTP_SERVICE_PORT}
+      - SERVICE_HOST=${SERVICE_HOST}
+      - PROXY_SERVICE_HOST=${PROXY_SERVICE_HOST}
+      - PROXY_SERVICE_PORT=${PROXY_SERVICE_PORT}
+      - DATABASE_PATH=${DATABASE_PATH}
+      - OWNER_PATH=${OWNER_PATH}
+      - BLOCKCHAIN_SERVICE_PORT=${BLOCKCHAIN_SERVICE_PORT}
+    volumes:
+      - './temp:/node/temp'
