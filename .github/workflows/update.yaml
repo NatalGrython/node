@@ -1,0 +1,20 @@
+name: Update action
+on:
+  push:
+    branches:
+      - master
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd proxy-server
+            git pull
+            docker-compose build
+            docker-compose up -d
