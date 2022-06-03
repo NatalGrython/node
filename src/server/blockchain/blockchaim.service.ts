@@ -107,7 +107,10 @@ export class BlockchainService {
 
     if (globalBlock.transactions.length + 1 > TXS_LIMIT) {
       return 'fail';
-    } else if (globalBlock.transactions.length + 1 === TXS_LIMIT) {
+    } else if (
+      globalBlock.transactions.length + 1 === TXS_LIMIT ||
+      createTransactionDto.hard
+    ) {
       try {
         await globalBlock.addTransaction(this.blockchain, transaction);
         this.eventEmitter.emit('mining', { status: 'on' });

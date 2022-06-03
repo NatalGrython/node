@@ -4,6 +4,7 @@ import {
   IsPositive,
   IsArray,
   ArrayNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 import { PickType } from '@nestjs/mapped-types';
 import { Address } from '../interfaces/address';
@@ -22,6 +23,8 @@ export class CreateTransactionDto {
   readonly reason: string;
   @IsArray({ message: 'Должен быть массив' })
   readonly addresses: Address[];
+  @IsBoolean({ message: 'Должно быть логическим значением' })
+  readonly hard: boolean;
 }
 
 export class CreateTransactionClientDto extends PickType(CreateTransactionDto, [
@@ -30,4 +33,5 @@ export class CreateTransactionClientDto extends PickType(CreateTransactionDto, [
   'reason',
   'recipient',
   'value',
+  'hard',
 ]) {}
