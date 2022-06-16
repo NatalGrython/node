@@ -14,6 +14,7 @@ import { ValidationPipe } from '../../pipes/validation.pipe';
 import { ApiService } from './api.service';
 import { ProxyServerNotAnswerExceptionFilter } from './filters/proxy-server.filter';
 import { PushBlockDto } from 'src/dto/push-block.dto';
+import { CancelTransactionClientDto } from 'src/dto/cancel-transaction.dto';
 
 @Controller('api')
 @UseFilters(new ValidationExceptionFilter())
@@ -46,6 +47,12 @@ export class ApiController {
   @UseFilters(new ProxyServerNotAnswerExceptionFilter())
   createTransaction(@Body() createTransactionDto: CreateTransactionClientDto) {
     return this.apiService.createTransaction(createTransactionDto);
+  }
+
+  @Post('transaction/cancel')
+  @UsePipes(new ValidationPipe())
+  cancelTransaction(@Body() cancelTransactionDto: CancelTransactionClientDto) {
+    return this.apiService.cancelTransaction(cancelTransactionDto);
   }
 
   @Post('push')

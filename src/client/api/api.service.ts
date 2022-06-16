@@ -4,6 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom, map } from 'rxjs';
 import { GetBalanceDto } from 'src/dto/balance.dto';
+import {
+  CancelTransactionClientDto,
+  CancelTransactionDto,
+} from 'src/dto/cancel-transaction.dto';
 import { PushBlockDto } from 'src/dto/push-block.dto';
 import { CreateTransactionClientDto } from 'src/dto/transaction.dto';
 import { ProxyServerNotAnswerException } from './exeptions/proxy-server.exeption';
@@ -37,6 +41,14 @@ export class ApiService {
 
     return this.tcpService.send('transaction', {
       ...createTransactionDto,
+      addresses: allNodes,
+    });
+  }
+
+  async cancelTransaction(cancelTransactionDto: CancelTransactionClientDto) {
+    const allNodes = await this.getAllNodes();
+    return this.tcpService.send('cancel', {
+      ...cancelTransactionDto,
       addresses: allNodes,
     });
   }

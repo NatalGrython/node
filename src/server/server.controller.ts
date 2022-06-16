@@ -1,6 +1,7 @@
 import { Controller, UseFilters, UsePipes } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { GetBalanceDto } from 'src/dto/balance.dto';
+import { CancelTransactionDto } from 'src/dto/cancel-transaction.dto';
 import { PushBlockDto } from 'src/dto/push-block.dto';
 import { CreateTransactionDto } from '../dto/transaction.dto';
 
@@ -40,12 +41,13 @@ export class ServiceController {
     return this.serverService.createTransaction(createTransactionDto);
   }
 
+  @MessagePattern('cancel')
+  cancelTransaction(cancelTransactionDto: CancelTransactionDto) {
+    return this.serverService.cancelTransaction(cancelTransactionDto);
+  }
+
   @MessagePattern('push')
   pushBlocks(pushBlockDto: PushBlockDto) {
-    console.log(
-      '🚀 ~ file: server.controller.ts ~ line 45 ~ ServiceController ~ pushBlocks ~ pushBlockDto',
-      pushBlockDto,
-    );
     return this.serverService.pushBlocks(pushBlockDto);
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CancelTransactionDto } from 'src/dto/cancel-transaction.dto';
 import { PushBlockDto } from 'src/dto/push-block.dto';
 import { CreateTransactionDto } from '../dto/transaction.dto';
 import { BlockchainService } from './blockchain/blockchaim.service';
@@ -29,6 +30,10 @@ export class ServerService {
 
   createTransaction(createTransaction: CreateTransactionDto) {
     return this.blockChainService.createTransaction(createTransaction);
+  }
+
+  cancelTransaction(cancelTransactionDto: CancelTransactionDto) {
+    return this.blockChainService.cancelTransaction(cancelTransactionDto);
   }
 
   pushBlocks(pushBlockDto: PushBlockDto) {

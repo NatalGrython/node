@@ -21,6 +21,7 @@ import { BlockService } from './services/block.service';
 import { TransactionService } from './services/transactions.service';
 import { UserService } from './services/user.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CancelTransactionDto } from 'src/dto/cancel-transaction.dto';
 
 @Injectable()
 export class BlockchainService {
@@ -72,6 +73,44 @@ export class BlockchainService {
       address: this.owner.stringAddress,
       privateKey: this.owner.stringPrivate,
     };
+  }
+
+  async cancelTransaction(cancelTransactionDto: CancelTransactionDto) {
+    const allBlocks = await this.getFullChain();
+    const allTransaction = allBlocks.reduce<
+      typeof allBlocks[number]['transactions']
+    >((acc, block) => {
+      acc.push(...block.transactions);
+      return acc;
+    }, []);
+    const currentTransaction = allTransaction.find(
+      (tx) => tx.currentHash === cancelTransactionDto.hash,
+    );
+    if (currentTransaction) {
+      const value = currentTransaction.value;
+      const sender = currentTransaction.sender;
+      const receiver = currentTransaction.receiver;
+      const owner = this.getOwner();
+      await this.createTransaction({
+        address: owner.address,
+        privateKey: owner.privateKey,
+        addresses: cancelTransactionDto.addresses,
+        recipient: sender,
+        value: value,
+        hard: false,
+        reason: `Отмена ${cancelTransactionDto.hash}`,
+      });
+      await this.createTransaction({
+        address: owner.address,
+        privateKey: owner.privateKey,
+        addresses: cancelTransactionDto.addresses,
+        recipient: receiver,
+        value: -value,
+        hard: false,
+        reason: `Отмена ${cancelTransactionDto.hash}`,
+      });
+    }
+    return 'nill';
   }
 
   async createTransaction(createTransactionDto: CreateTransactionDto) {
