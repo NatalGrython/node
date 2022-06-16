@@ -10,6 +10,8 @@ async function bootstrap() {
   const appPort = configService.get('HTTP_SERVICE_PORT');
   const microservicePort = configService.get('BLOCKCHAIN_SERVICE_PORT');
 
+  app.enableCors();
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
