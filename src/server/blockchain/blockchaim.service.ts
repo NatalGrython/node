@@ -106,11 +106,13 @@ export class BlockchainService {
         addresses: cancelTransactionDto.addresses,
         recipient: receiver,
         value: -value,
-        hard: false,
+        hard: true,
         reason: `Отмена ${cancelTransactionDto.hash}`,
       });
+      return 'true';
+    } else {
+      return 'nill';
     }
-    return 'nill';
   }
 
   async createTransaction(createTransactionDto: CreateTransactionDto) {
